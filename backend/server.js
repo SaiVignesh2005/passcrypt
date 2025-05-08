@@ -14,10 +14,11 @@ const dbName = 'passcrypt';
 let db;
 
 async function connectDB() {
-  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  const client = await MongoClient.connect(uri);
   db = client.db(dbName);
   console.log(`Connected to database: ${dbName}`);
 }
+
 
 connectDB();
 
