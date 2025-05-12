@@ -107,12 +107,12 @@ function encrypt(input) {
     const encRight = transformEncrypt(nthPermutation(right, totRight - rkRight + 1));
 
     switch (n % 6) {
-        case 0: return encLeft + encMiddle + encRight;
-        case 1: return encLeft + encRight + encMiddle;
-        case 2: return encMiddle + encLeft + encRight;
-        case 3: return encMiddle + encRight + encLeft;
-        case 4: return encRight + encLeft + encMiddle;
-        default: return encRight + encMiddle + encLeft;
+        case 0: return encLeft + encMiddle + encRight;//123
+        case 1: return encLeft + encRight + encMiddle;//132
+        case 2: return encMiddle + encLeft + encRight;//213
+        case 3: return encMiddle + encRight + encLeft;//231
+        case 4: return encRight + encLeft + encMiddle;//312
+        default: return encRight + encMiddle + encLeft;//321
     }
 }
 

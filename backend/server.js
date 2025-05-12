@@ -2,12 +2,14 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
+const masterRouter = require('./master');
 
 const app = express();
 const port = 3000;
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use("/master", masterRouter); 
 
 const uri = 'mongodb://127.0.0.1:27017';
 const dbName = 'passcrypt';

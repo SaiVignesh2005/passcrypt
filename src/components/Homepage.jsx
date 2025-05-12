@@ -167,7 +167,7 @@ const Homepage = () => {
                                     ref={passwordRef}
                                     src={showPassword ? visibleEye : hiddenEye}
                                     alt="Toggle Password"
-                                    className="w-5 h-5 cursor-pointer"
+                                    className="w-5 h-5 cursor-pointer hover:scale-110"
                                     onClick={togglePassword}
                                 />
                             </span>
@@ -176,9 +176,9 @@ const Homepage = () => {
 
                     <button
                         type="submit"
-                        className="border border-blue-600 bg-sky-500 hover:bg-sky-300 flex rounded-xl h-10 cursor-pointer gap-2 text-black py-2 px-4 w-fit justify-center items-center"
+                        className="border border-blue-600 bg-sky-500 hover:bg-sky-300 flex rounded-xl h-10 cursor-pointer gap-2 text-black py-2 px-4 w-fit justify-center items-center hover:scale-105"
                     >
-                        <img src={add} alt="Add" className="w-6" />
+                        <img src={add} alt="Add" className="w-6 " />
                         Save Password
                     </button>
                 </form>
@@ -213,7 +213,7 @@ const Homepage = () => {
                                                     </a>
 
                                                     <button onClick={() => copyText(info.site)} className="flex-shrink-0">
-                                                        <img src={copy} alt="Copy site" className="w-5 h-5 cursor-pointer" />
+                                                        <img src={copy} alt="Copy site" className="w-5 h-5 cursor-pointer hover:scale-110" />
                                                     </button>
                                                 </div>
                                             </td>
@@ -222,7 +222,7 @@ const Homepage = () => {
                                                 <div className="flex items-center space-x-2">
                                                     <span className="truncate flex-1 max-w-[200px]">{info.username}</span>
                                                     <button onClick={() => copyText(info.username)} className="flex-shrink-0">
-                                                        <img src={copy} alt="Copy username" className="w-5 h-5 cursor-pointer" />
+                                                        <img src={copy} alt="Copy username" className="w-5 h-5 cursor-pointer hover:scale-110" />
                                                     </button>
                                                 </div>
                                             </td>
@@ -231,7 +231,7 @@ const Homepage = () => {
                                                 <div className="flex items-center space-x-2">
                                                     <span className="truncate flex-1 max-w-[200px]">{info.password}</span>
                                                     <button onClick={() => copyText(info.password)} className="flex-shrink-0">
-                                                        <img src={copy} alt="Copy password" className="w-5 h-5 cursor-pointer" />
+                                                        <img src={copy} alt="Copy password" className="w-5 h-5 cursor-pointer hover:scale-110" />
                                                     </button>
                                                 </div>
                                             </td>
@@ -239,10 +239,10 @@ const Homepage = () => {
                                             <td className="py-2 px-4 text-left">
                                                 <div className="flex justify-start items-center gap-3">
                                                     <button onClick={() => handleEditPassword(info.id)} className="cursor-pointer flex-shrink-0">
-                                                        <img src={edit} alt="Edit" className="w-5 h-5" />
+                                                        <img src={edit} alt="Edit" className="w-5 h-5 hover:scale-110" />
                                                     </button>
                                                     <button onClick={() => handleDeletePassword(info.id)} className="cursor-pointer flex-shrink-0">
-                                                        <img src={deleteIcon} alt="Delete" className="w-5 h-5 cursor-pointer" />
+                                                        <img src={deleteIcon} alt="Delete" className="w-5 h-5 cursor-pointer hover:scale-110" />
                                                     </button>
                                                 </div>
                                             </td>
