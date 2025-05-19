@@ -21,12 +21,31 @@ const Homepage = () => {
         fetchPasswords();
     }, []);
 
+    useEffect(() => {
+        fetchPasswords();
+    }, []);
+
+    useEffect(() => {
+        toast.info('Master password verified!', {
+            position: "top-center",
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "dark",
+            transition: Bounce,
+            style: { maxWidth: "100%" }
+        });
+    }, []);
+
+
     const fetchPasswords = async () => {
         const res = await fetch('http://localhost:3000/passwords');
         const data = await res.json();
         const decrypted = (data.passwords || []).map(item => ({
             ...item,
-            password: decrypt(item.password), 
+            password: decrypt(item.password),
         }));
         setDatabase(decrypted);
     };
@@ -106,6 +125,7 @@ const Homepage = () => {
         `border-blue-600 h-10 p-2 rounded-xl placeholder-gray-500 bg-white text-[#1F2937] border ${extra}`;
 
     return (
+
 
         <div className="py-10 relative w-full max-w-screen box-border overflow-x-hidden">
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import logo from "../assets/images/logo.svg";
-import bcrypt from "bcryptjs";
+import { ToastContainer, toast, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function MasterPassword({ onUnlock }) {
     const [password, setPassword] = useState('');
@@ -11,54 +12,113 @@ export default function MasterPassword({ onUnlock }) {
     const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
-        const storedHashedPassword = localStorage.getItem("hashedPassword");
-        if (storedHashedPassword) {
-            setIsNewPassword(false);
-        } else {
-            setIsNewPassword(true);
-        }
+        const checkMasterExists = async () => {
+            try {
+                const res = await fetch('http://localhost:3000/master/exists');
+                const data = await res.json();
+                setIsNewPassword(!data.exists);
+            } catch {
+                setIsNewPassword(true);
+            }
+        };
+        checkMasterExists();
     }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const storedHashedPassword = localStorage.getItem("hashedPassword");
-
         if (isNewPassword) {
             if (password.length >= 8 && password === confirmPassword) {
-                const salt = bcrypt.genSaltSync(10);
-                const hashedPassword = bcrypt.hashSync(password, salt);
-                localStorage.setItem("hashedPassword", hashedPassword);
-                onUnlock(password);
+                await fetch('http://localhost:3000/master/set', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
+                });
+                toast.success(
+                    <div className="flex items-center gap-2">
+                        Master password created!.
+                    </div>, {
+                        style: { background: '#9afecd', color: '#064E3B' },
+                        position: "top-center",
+                        autoClose: 3000,
+                        transition: Bounce
+                    }
+                );
+                setPassword('');
+                setConfirmPassword('');
+                setIsNewPassword(false);
             } else {
-                if(password.length < 8) {
-                    alert("Password must be at least 8 characters long.");
-                }
-                else{
-                    alert("Passwords do not match.");
-                }
+                toast.error(
+                    <div className="flex items-center gap-2">
+                        {password.length < 8 ? "Password must be at least 8 characters." : "Passwords do not match."}
+                    </div>, {
+                        style: { background: '#fcdcde', color: '#7F1D1D' },
+                        position: "top-center",
+                        autoClose: 3000,
+                        transition: Bounce
+                    }
+                );
             }
         } else {
-            if (bcrypt.compareSync(password, storedHashedPassword)) {
+            const res = await fetch('http://localhost:3000/master/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password })
+            });
+            const data = await res.json();
+            if (data.valid) {
                 onUnlock(password);
             } else {
-                alert("Incorrect master password.");
+                toast.error(
+                    <div className="flex items-center gap-2">
+                        Incorrect master password.
+                    </div>, {
+                        style: { background: '#fcdcde', color: '#7F1D1D' },
+                        position: "top-center",
+                        autoClose: 3000,
+                        transition: Bounce
+                    }
+                );
             }
         }
     };
 
-    const handleResetPassword = (e) => {
+    const handleResetPassword = async (e) => {
         e.preventDefault();
-
-        const storedHashedPassword = localStorage.getItem("hashedPassword");
-        if (bcrypt.compareSync(currentPassword, storedHashedPassword)) {
-            localStorage.removeItem("hashedPassword");
-            setIsNewPassword(true);
+        const res = await fetch('http://localhost:3000/master/reset', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ currentPassword, newPassword: password })
+        });
+        const data = await res.json();
+        if (data.reset) {
+            setIsNewPassword(false);
             setPassword('');
             setConfirmPassword('');
             setCurrentPassword('');
             setIsResetting(false);
+            setErrorMessage('');
+            toast.success(
+                <div className="flex items-center gap-2">
+                    Master password reset successfully!
+                </div>, {
+                    style: { background: '#9afecd', color: '#064E3B' },
+                    position: "top-center",
+                    autoClose: 3000,
+                    transition: Bounce
+                }
+            );
         } else {
             setErrorMessage("Incorrect current password. Cannot reset.");
+            toast.error(
+                <div className="flex items-center gap-2">
+                    Incorrect current password. Cannot reset.
+                </div>, {
+                    style: { background: '#fcdcde', color: '#7F1D1D' },
+                    position: "top-center",
+                    autoClose: 3000,
+                    transition: Bounce
+                }
+            );
         }
     };
 
@@ -71,11 +131,7 @@ export default function MasterPassword({ onUnlock }) {
                         <img src={logo} alt="Logo" className="absolute top-[-120px] w-48 h-48" />
                         <p className="text-lg text-[#1F2937] absolute top-[-10px] py-3">Your Password Manager</p>
                     </div>
-
-                    <form
-                        onSubmit={handleResetPassword}
-                        className="bg-blue-50 border border-blue-200 p-6 rounded-xl shadow w-full max-w-sm"
-                    >
+                    <form onSubmit={handleResetPassword} className="bg-blue-50 border border-blue-200 p-6 rounded-xl shadow w-full max-w-sm">
                         <h2 className="text-xl font-semibold mb-4 text-center">Reset Master Password</h2>
                         <input
                             type="password"
@@ -84,15 +140,30 @@ export default function MasterPassword({ onUnlock }) {
                             onChange={(e) => setCurrentPassword(e.target.value)}
                             className="w-full p-2 rounded border border-blue-300 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
                         />
+                        <input
+                            type="password"
+                            placeholder="Enter new password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full p-2 rounded border border-blue-300 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        />
+                        <input
+                            type="password"
+                            placeholder="Confirm new password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className="w-full p-2 rounded border border-blue-300 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        />
                         {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
                         <button
                             type="submit"
-                            className="w-full bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 rounded hover:cursor-pointer hover:font-bold "
+                            className="w-full bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 rounded"
                         >
                             Reset Password
                         </button>
                     </form>
                 </div>
+                <ToastContainer />
             </div>
         );
     }
@@ -105,11 +176,7 @@ export default function MasterPassword({ onUnlock }) {
                     <img src={logo} alt="Logo" className="absolute top-[-120px] w-48 h-48" />
                     <p className="text-lg text-[#1F2937] absolute top-[-10px] py-3">Your Password Manager</p>
                 </div>
-
-                <form
-                    onSubmit={handleSubmit}
-                    className="bg-blue-50 border border-blue-200 p-6 rounded-xl shadow w-full max-w-sm"
-                >
+                <form onSubmit={handleSubmit} className="bg-blue-50 border border-blue-200 p-6 rounded-xl shadow w-full max-w-sm">
                     <h2 className="text-xl font-semibold mb-4 text-center">
                         {isNewPassword ? "Create Master Password" : "Enter Master Password"}
                     </h2>
@@ -131,21 +198,28 @@ export default function MasterPassword({ onUnlock }) {
                     )}
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 rounded hover:cursor-pointer hover:font-bold "
+                        className="w-full bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 rounded"
                     >
                         {isNewPassword ? "Set Password" : "Unlock"}
                     </button>
                     {!isNewPassword && (
                         <button
                             type="button"
-                            onClick={() => setIsResetting(true)}
-                            className="w-full bg-red-600 hover:bg-red-800 text-white font-semibold py-2 mt-4 rounded hover:cursor-pointer hover:font-bold "
+                            onClick={() => {
+                                setIsResetting(true);
+                                setPassword('');
+                                setConfirmPassword('');
+                                setCurrentPassword('');
+                                setErrorMessage('');
+                            }}
+                            className="w-full bg-red-600 hover:bg-red-800 text-white font-semibold py-2 mt-4 rounded"
                         >
                             Reset Password
                         </button>
                     )}
                 </form>
             </div>
+            <ToastContainer />
         </div>
     );
 }
