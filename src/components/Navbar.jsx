@@ -17,7 +17,7 @@ const Navbar = () => {
           <img src={logo} alt="Logo" className="w-45" />
         </div>
 
-       <button onClick={() => window.open('https://github.com/SaiVignesh2005/passcrypt', '_blank')} className="flex items-center space-x-4 cursor-pointer hover:font-bold hover:text-[#2563EB] transition-all duration-200">
+       <button onClick={() => window.open('https://github.com/SaiVignesh2005/passcrypt', '_blank')} className="flex items-center space-x-4 cursor-pointer hover:font-bold hover:text-[#2563EB] transition-all duration-200 hover:scale-110">
           <img src={github} alt="GitHub" className='invert h-8' />
            <span className='font-bold'>GitHub</span>
        </button> 

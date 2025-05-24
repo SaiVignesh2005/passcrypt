@@ -1,0 +1,23 @@
+/* Ensure full viewport height and reset margins */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+#root {
+  height: 100%;
+}
+
+/* Flex layout for sticky footer */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Main content grows to fill available space */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}

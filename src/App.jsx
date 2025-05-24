@@ -13,24 +13,21 @@ function App() {
     setUnlocked(true);
     setPassword(enteredPassword);
   }
-  
-  return (
-    <>
+
+ return (
+  <div className="app-container">
+    <Navbar />
+    <div className="main-content">
       {unlocked ? (
-        <>
-          <Navbar />
-          <Homepage masterPassword={password} />
-          <Footer />
-        </>
+        <Homepage masterPassword={password} />
       ) : (
-        <>
-          <Navbar />
-          <MasterPassword onUnlock={handleUnlock}/>
-          <Footer />
-        </>
+        <MasterPassword onUnlock={handleUnlock}/>
       )}
-    </>
-  );
+    </div>
+    <Footer />
+  </div>
+);
+
 }
 
 export default App

@@ -198,7 +198,7 @@ export default function MasterPassword({ onUnlock }) {
                     )}
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 rounded"
+                        className="w-full bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 rounded cursor-pointer hover:scale-102 "
                     >
                         {isNewPassword ? "Set Password" : "Unlock"}
                     </button>
@@ -212,7 +212,7 @@ export default function MasterPassword({ onUnlock }) {
                                 setCurrentPassword('');
                                 setErrorMessage('');
                             }}
-                            className="w-full bg-red-600 hover:bg-red-800 text-white font-semibold py-2 mt-4 rounded"
+                            className=" w-full bg-red-600 hover:bg-red-800 text-white font-semibold py-2 mt-4 rounded cursor-pointer hover:scale-102"
                         >
                             Reset Password
                         </button>
