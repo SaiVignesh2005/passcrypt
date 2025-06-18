@@ -3,32 +3,18 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
 const { router: masterRouter, setDB: setMasterDB } = require('./master');
+require('dotenv').config();
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
+const uri = process.env.MONGO_URI;
+const dbName = process.env.MONGO_DB || 'passcrypt';
+
+let db;
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use("/master", masterRouter);
-
-const uri = 'mongodb://127.0.0.1:27017';
-const dbName = 'passcrypt';
-let db;
-
-async function startServer() {
-  try {
-    const client = await MongoClient.connect(uri);
-    db = client.db(dbName);
-    setMasterDB(db);
-    console.log(`Connected to database: ${dbName}`);
-
-    app.listen(port, () => {
-      console.log(`Server is running on http://localhost:${port}`);
-    });
-  } catch (error) {
-    console.error('Failed to connect to database:', error);
-  }
-}
 
 app.get('/', (req, res) => {
   res.send('Server is running!');
@@ -73,5 +59,20 @@ app.get('/passwords', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+async function startServer() {
+  try {
+    const client = await MongoClient.connect(uri);
+    db = client.db(dbName);
+    setMasterDB(db);
+    console.log(`Connected to database: ${dbName}`);
+
+    app.listen(port, () => {
+      console.log(`Server is running on http://localhost:${port}`);
+    });
+  } catch (error) {
+    console.error('Failed to connect to database:', error);
+  }
+}
 
 startServer();
