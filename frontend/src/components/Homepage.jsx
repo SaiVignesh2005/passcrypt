@@ -81,7 +81,7 @@ const Homepage = () => {
         theme: "dark",
         transition: Bounce,
         style: {
-            width: 'calc(100% - 1.5rem)',
+            width: '90%',
             maxWidth: '420px',
             margin: '0 auto',
         }
@@ -171,7 +171,11 @@ return (
             pauseOnHover
             theme="dark"
             transition={Bounce}
-            style={{ maxWidth: "40%" }}
+            style={{
+                width: '90%',
+                maxWidth: '420px',
+                margin: '0 auto',
+            }}
         />
 
         <div className="absolute inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,#0000000a_1px,transparent_1px),_linear-gradient(to_bottom,#0000000a_1px,transparent_1px),#F9FAFB] bg-[size:14px_24px]" />

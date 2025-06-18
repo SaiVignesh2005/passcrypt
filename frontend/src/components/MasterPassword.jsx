@@ -59,7 +59,7 @@ export default function MasterPassword({ onUnlock }) {
                     <div className="flex items-center gap-2">Master password created!</div>,
                     {
                         style: {
-                            background: '#9afecd', color: '#064E3B', width: 'calc(100% - 1.5rem)',
+                            background: '#9afecd', color: '#064E3B', width: '90%',
                             maxWidth: '420px',
                             margin: '0 auto',
                         },
@@ -79,7 +79,7 @@ export default function MasterPassword({ onUnlock }) {
                     </div>,
                     {
                         style: {
-                            background: '#fcdcde', color: '#7F1D1D', width: 'calc(100% - 1.5rem)',
+                            background: '#fcdcde', color: '#7F1D1D', width: '90%',
                             maxWidth: '420px',
                             margin: '0 auto',
                         },
@@ -106,7 +106,7 @@ export default function MasterPassword({ onUnlock }) {
                     <div className="flex items-center gap-2">Incorrect master password.</div>,
                     {
                         style: {
-                            background: '#fcdcde', color: '#7F1D1D', width: 'calc(100% - 1.5rem)',
+                            background: '#fcdcde', color: '#7F1D1D', width: '90%',
                             maxWidth: '420px',
                             margin: '0 auto',
                         },
@@ -143,7 +143,7 @@ export default function MasterPassword({ onUnlock }) {
                 <div className="flex items-center gap-2">Master password reset successfully!</div>,
                 {
                     style: {
-                        background: '#9afecd', color: '#064E3B', width: 'calc(100% - 1.5rem)',
+                        background: '#9afecd', color: '#064E3B', width: '90%',
                         maxWidth: '420px',
                         margin: '0 auto',
                     },
@@ -159,7 +159,7 @@ export default function MasterPassword({ onUnlock }) {
                 <div className="flex items-center gap-2">Incorrect current password. Cannot reset.</div>,
                 {
                     style: {
-                        background: '#fcdcde', color: '#7F1D1D', width: 'calc(100% - 1.5rem)',
+                        background: '#fcdcde', color: '#7F1D1D', width: '90%',
                         maxWidth: '420px',
                         margin: '0 auto',
                     },
