@@ -26,6 +26,8 @@ const Homepage = () => {
     const [database, setDatabase] = useState([]);
     const [showPassword, setShowPassword] = useState(false);
 
+    console.log("Using deviceId:", deviceId);
+
     useEffect(() => {
         fetchPasswords();
     }, []);
@@ -90,17 +92,17 @@ const Homepage = () => {
         };
 
         const res = userInfo.id
-            ? await fetch(`${API_BASE}/passwords/${userInfo.id}?deviceId=${deviceId}`, {
+            ? await fetch(`${API_BASE}/passwords/${userInfo.id}`, {
                 method: 'PUT',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
+                body: JSON.stringify({ ...payload, deviceId }),
             })
-            : await fetch(`${API_BASE}/passwords?deviceId=${deviceId}`, {
+            : await fetch(`${API_BASE}/passwords`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
+                body: JSON.stringify({ ...payload, deviceId }),
             });
 
         res.ok && showToast(userInfo.id ? 'Password updated!' : 'Password saved!');
@@ -116,7 +118,12 @@ const Homepage = () => {
 
     const handleDeletePassword = async (id) => {
         if (!confirm("Are you sure you want to delete this password?")) return;
-        const res = await fetch(`${API_BASE}/passwords/${id}?deviceId=${deviceId}`, { method: 'DELETE' , credentials: 'include' });
+        const res = await fetch(`${API_BASE}/passwords/${id}`,{ 
+            method: 'DELETE' ,
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ deviceId })
+         });
         res.ok && showToast('Password deleted!');
         fetchPasswords();
     };
