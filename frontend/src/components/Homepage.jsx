@@ -275,7 +275,10 @@ const Homepage = () => {
 
                                             <td className="py-2 px-4 text-left">
                                                 <div className="flex items-center space-x-2">
-                                                    <span className="truncate flex-1 max-w-[200px]">
+                                                    <span
+                                                        className="truncate flex-1 max-w-[200px] font-mono"
+                                                        style={{ minWidth: '100px', display: 'inline-block' }}
+                                                    >
                                                         {visibleIds.has(info.id) ? info.password : '•'.repeat(8)}
                                                     </span>
                                                     <button onClick={() => toggleRowPassword(info.id)} className="flex-shrink-0">
@@ -290,6 +293,7 @@ const Homepage = () => {
                                                     </button>
                                                 </div>
                                             </td>
+
 
 
                                             <td className="py-2 px-4 text-left">
