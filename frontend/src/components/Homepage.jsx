@@ -18,7 +18,6 @@ const Homepage = () => {
     const [database, setDatabase] = useState([]);
     const [showPassword, setShowPassword] = useState(false);
 
-    // Fetch deviceId once per session
     const deviceId = localStorage.getItem('deviceId');
 
     useEffect(() => {
@@ -232,9 +231,7 @@ const Homepage = () => {
                                             <td className="py-2 px-4 text-left">
                                                 <div className="flex items-center space-x-2">
                                                     <a
-                                                        href={info.site.startsWith('http')
-                                                            ? info.site
-                                                            : `https://${info.site}`}
+                                                        href={info.site.startsWith('http') ? info.site : `https://${info.site}`}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         className="truncate flex-1 max-w-[200px] text-blue-700 hover:underline"
@@ -248,9 +245,7 @@ const Homepage = () => {
                                             </td>
                                             <td className="py-2 px-4 text-left">
                                                 <div className="flex items-center space-x-2">
-                                                    <span className="truncate flex-1 max-w-[200px]">
-                                                        {info.username}
-                                                    </span>
+                                                    <span className="truncate flex-1 max-w-[200px]">{info.username}</span>
                                                     <button onClick={() => copyText(info.username)}>
                                                         <img src={copy} alt="Copy username" className="w-5 h-5 hover:scale-110" />
                                                     </button>
@@ -258,9 +253,7 @@ const Homepage = () => {
                                             </td>
                                             <td className="py-2 px-4 text-left">
                                                 <div className="flex items-center space-x-2">
-                                                    <span className="truncate flex-1 max-w-[200px]">
-                                                        {info.password}
-                                                    </span>
+                                                    <span className="truncate flex-1 max-w-[200px]">{info.password}</span>
                                                     <button onClick={() => copyText(info.password)}>
                                                         <img src={copy} alt="Copy password" className="w-5 h-5 hover:scale-110" />
                                                     </button>
@@ -271,7 +264,7 @@ const Homepage = () => {
                                                     <button onClick={() => handleEditPassword(info.id)}>
                                                         <img src={edit} alt="Edit" className="w-5 h-5 hover:scale-110" />
                                                     </button>
-                                                    <button onClick={() => handleDeletePassword(info.id)}>
+                                                    <button onClick={() => handleDeletePassword(info.id)}>  
                                                         <img src={deleteIcon} alt="Delete" className="w-5 h-5 hover:scale-110" />
                                                     </button>
                                                 </div>
