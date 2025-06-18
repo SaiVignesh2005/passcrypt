@@ -279,7 +279,7 @@ const Homepage = () => {
                                                         className="truncate flex-1 max-w-[200px] font-mono"
                                                         style={{ minWidth: '100px', display: 'inline-block' }}
                                                     >
-                                                        {visibleIds.has(info.id) ? info.password : '•'.repeat(8)}
+                                                        {visibleIds.has(info.id) ? info.password : '•'.repeat(16)}
                                                     </span>
                                                     <button onClick={() => toggleRowPassword(info.id)} className="flex-shrink-0">
                                                         <img
