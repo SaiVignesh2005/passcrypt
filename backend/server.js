@@ -15,7 +15,7 @@ let db;
 app.use(cors({
   origin: [
     "https://passcrypt-theta.vercel.app",
-     "https://passcrypt-3ng73jpn2-sai-vignesh-bharadwajs-projects.vercel.app",
+    "https://passcrypt-3ng73jpn2-sai-vignesh-bharadwajs-projects.vercel.app",
     "http://localhost:5173",
     "http://localhost:5174",
     "http://localhost:5175",
@@ -28,7 +28,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.use(bodyParser.json());
 app.use("/master", masterRouter);
 
@@ -38,8 +37,9 @@ app.get('/', (req, res) => {
 
 app.post('/passwords', async (req, res) => {
   try {
-    const { site, username, password, id } = req.body;
-    const result = await db.collection('passwords').insertOne({ site, username, password, id });
+    const { site, username, password, id, deviceId } = req.body;
+    if (!deviceId) return res.status(400).json({ error: "Missing deviceId" });
+    const result = await db.collection('passwords').insertOne({ site, username, password, id, deviceId });
     res.send({ message: 'Password saved successfully', result });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -49,8 +49,11 @@ app.post('/passwords', async (req, res) => {
 app.put('/passwords/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { site, username, password } = req.body;
-    const result = await db.collection('passwords').updateOne({ id }, { $set: { site, username, password } });
+    const { site, username, password, deviceId } = req.body;
+    const result = await db.collection('passwords').updateOne(
+      { id, deviceId },
+      { $set: { site, username, password } }
+    );
     res.send({ message: 'Password updated successfully', result });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -60,7 +63,8 @@ app.put('/passwords/:id', async (req, res) => {
 app.delete('/passwords/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    await db.collection('passwords').deleteOne({ id });
+    const { deviceId } = req.body;
+    await db.collection('passwords').deleteOne({ id, deviceId });
     res.send({ message: 'Password deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -69,7 +73,9 @@ app.delete('/passwords/:id', async (req, res) => {
 
 app.get('/passwords', async (req, res) => {
   try {
-    const passwords = await db.collection('passwords').find({}).toArray();
+    const { deviceId } = req.query;
+    if (!deviceId) return res.status(400).json({ error: "Missing deviceId" });
+    const passwords = await db.collection('passwords').find({ deviceId }).toArray();
     res.send({ passwords });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -87,10 +93,10 @@ async function startServer() {
     setMasterDB(db);
     console.log(`Connected to database: ${dbName}`);
   } catch (error) {
-    console.error('❌ Failed to connect to database:', error);
+    console.error(' Failed to connect to database:', error);
   } finally {
     app.listen(port, () => {
-      console.log(`✅ Server is running on http://localhost:${port}`);
+      console.log(` Server is running on http://localhost:${port}`);
     });
   }
 }

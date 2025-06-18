@@ -2,10 +2,22 @@ import { useState, useEffect } from "react";
 import logo from "../assets/images/logo.svg";
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:10000";
 
+const getDeviceId = () => {
+    let deviceId = localStorage.getItem('deviceId');
+
+    if (!deviceId) {
+        deviceId = crypto.randomUUID();
+        localStorage.setItem('deviceId', deviceId);
+    }
+
+    return deviceId;
+};
 
 export default function MasterPassword({ onUnlock }) {
+    const deviceId = getDeviceId();
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [isNewPassword, setIsNewPassword] = useState(false);
@@ -16,39 +28,43 @@ export default function MasterPassword({ onUnlock }) {
     useEffect(() => {
         const checkMasterExists = async () => {
             try {
-                const res = await fetch(`${API_BASE}/master/exists`, {
+                const res = await fetch(`${API_BASE}/master/exists/${deviceId}`, {
                     method: 'GET',
                     credentials: 'include'
                 });
+
                 const data = await res.json();
                 setIsNewPassword(!data.exists);
             } catch {
                 setIsNewPassword(true);
             }
         };
+
         checkMasterExists();
-    }, []);
+    }, [deviceId]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         if (isNewPassword) {
             if (password.length >= 8 && password === confirmPassword) {
                 await fetch(`${API_BASE}/master/set`, {
                     method: 'POST',
                     credentials: 'include',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password })
+                    body: JSON.stringify({ password, deviceId })
                 });
+
                 toast.success(
-                    <div className="flex items-center gap-2">
-                        Master password created!.
-                    </div>, {
+                    <div className="flex items-center gap-2">Master password created!</div>,
+                    {
                         style: { background: '#9afecd', color: '#064E3B' },
                         position: "top-center",
                         autoClose: 3000,
                         transition: Bounce
                     }
                 );
+
                 setPassword('');
                 setConfirmPassword('');
                 setIsNewPassword(false);
@@ -56,7 +72,8 @@ export default function MasterPassword({ onUnlock }) {
                 toast.error(
                     <div className="flex items-center gap-2">
                         {password.length < 8 ? "Password must be at least 8 characters." : "Passwords do not match."}
-                    </div>, {
+                    </div>,
+                    {
                         style: { background: '#fcdcde', color: '#7F1D1D' },
                         position: "top-center",
                         autoClose: 3000,
@@ -69,16 +86,17 @@ export default function MasterPassword({ onUnlock }) {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ password })
+                body: JSON.stringify({ password, deviceId })
             });
+
             const data = await res.json();
+
             if (data.valid) {
                 onUnlock(password);
             } else {
                 toast.error(
-                    <div className="flex items-center gap-2">
-                        Incorrect master password.
-                    </div>, {
+                    <div className="flex items-center gap-2">Incorrect master password.</div>,
+                    {
                         style: { background: '#fcdcde', color: '#7F1D1D' },
                         position: "top-center",
                         autoClose: 3000,
@@ -91,13 +109,16 @@ export default function MasterPassword({ onUnlock }) {
 
     const handleResetPassword = async (e) => {
         e.preventDefault();
+
         const res = await fetch(`${API_BASE}/master/reset`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ currentPassword, newPassword: password })
+            body: JSON.stringify({ currentPassword, newPassword: password, deviceId })
         });
+
         const data = await res.json();
+
         if (data.reset) {
             setIsNewPassword(false);
             setPassword('');
@@ -105,10 +126,10 @@ export default function MasterPassword({ onUnlock }) {
             setCurrentPassword('');
             setIsResetting(false);
             setErrorMessage('');
+
             toast.success(
-                <div className="flex items-center gap-2">
-                    Master password reset successfully!
-                </div>, {
+                <div className="flex items-center gap-2">Master password reset successfully!</div>,
+                {
                     style: { background: '#9afecd', color: '#064E3B' },
                     position: "top-center",
                     autoClose: 3000,
@@ -117,10 +138,10 @@ export default function MasterPassword({ onUnlock }) {
             );
         } else {
             setErrorMessage("Incorrect current password. Cannot reset.");
+
             toast.error(
-                <div className="flex items-center gap-2">
-                    Incorrect current password. Cannot reset.
-                </div>, {
+                <div className="flex items-center gap-2">Incorrect current password. Cannot reset.</div>,
+                {
                     style: { background: '#fcdcde', color: '#7F1D1D' },
                     position: "top-center",
                     autoClose: 3000,
@@ -206,7 +227,7 @@ export default function MasterPassword({ onUnlock }) {
                     )}
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 rounded cursor-pointer hover:scale-102 "
+                        className="w-full bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 rounded cursor-pointer hover:scale-102"
                     >
                         {isNewPassword ? "Set Password" : "Unlock"}
                     </button>
@@ -220,7 +241,7 @@ export default function MasterPassword({ onUnlock }) {
                                 setCurrentPassword('');
                                 setErrorMessage('');
                             }}
-                            className=" w-full bg-red-600 hover:bg-red-800 text-white font-semibold py-2 mt-4 rounded cursor-pointer hover:scale-102"
+                            className="w-full bg-red-600 hover:bg-red-800 text-white font-semibold py-2 mt-4 rounded cursor-pointer hover:scale-102"
                         >
                             Reset Password
                         </button>
