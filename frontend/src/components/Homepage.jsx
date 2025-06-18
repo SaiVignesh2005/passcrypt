@@ -12,6 +12,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { encrypt, decrypt } from '../encyption';
 const API_BASE = import.meta.env.VITE_API_URL;
 
+
+
 const Homepage = () => {
     const passwordRef = useRef();
     const [userInfo, setUserInfo] = useState({ site: '', username: '', password: '', id: '' });
@@ -42,7 +44,10 @@ const Homepage = () => {
 
 
     const fetchPasswords = async () => {
-        const res = await fetch(`${API_BASE}/passwords`);
+        const res = await fetch(`${API_BASE}/passwords`,{
+            method: 'GET',
+            credentials: 'include'  
+        });
         const data = await res.json();
         const decrypted = (data.passwords || []).map(item => ({
             ...item,
@@ -85,11 +90,13 @@ const Homepage = () => {
         const res = userInfo.id
             ? await fetch(`${API_BASE}/passwords/${userInfo.id}`, {
                 method: 'PUT',
+                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
             })
             : await fetch(`${API_BASE}/passwords`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload),
             });
@@ -107,7 +114,7 @@ const Homepage = () => {
 
     const handleDeletePassword = async (id) => {
         if (!confirm("Are you sure you want to delete this password?")) return;
-        const res = await fetch(`${API_BASE}/passwords/${id}`, { method: 'DELETE' });
+        const res = await fetch(`${API_BASE}/passwords/${id}`, { method: 'DELETE' , credentials: 'include' });
         res.ok && showToast('Password deleted!');
         fetchPasswords();
     };

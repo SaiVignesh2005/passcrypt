@@ -12,7 +12,17 @@ const dbName = process.env.MONGO_DB || 'passcrypt';
 
 let db;
 
-app.use(cors());
+app.use(cors({
+  origin: [
+   "https://passcrypt-theta.vercel.app", 
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5175", // 
+],
+credentials: true
+}));
+
+
 app.use(bodyParser.json());
 app.use("/master", masterRouter);
 

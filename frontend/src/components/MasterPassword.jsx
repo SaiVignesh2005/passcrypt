@@ -4,6 +4,7 @@ import { ToastContainer, toast, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const API_BASE = import.meta.env.VITE_API_URL;
 
+
 export default function MasterPassword({ onUnlock }) {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -15,7 +16,10 @@ export default function MasterPassword({ onUnlock }) {
     useEffect(() => {
         const checkMasterExists = async () => {
             try {
-                const res = await fetch(`${API_BASE}/master/exists`);
+                const res = await fetch(`${API_BASE}/master/exists`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
                 const data = await res.json();
                 setIsNewPassword(!data.exists);
             } catch {
@@ -31,6 +35,7 @@ export default function MasterPassword({ onUnlock }) {
             if (password.length >= 8 && password === confirmPassword) {
                 await fetch(`${API_BASE}/master/set`, {
                     method: 'POST',
+                    credentials: 'include',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ password })
                 });
@@ -62,6 +67,7 @@ export default function MasterPassword({ onUnlock }) {
         } else {
             const res = await fetch(`${API_BASE}/master/verify`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password })
             });
@@ -87,6 +93,7 @@ export default function MasterPassword({ onUnlock }) {
         e.preventDefault();
         const res = await fetch(`${API_BASE}/master/reset`, {
             method: 'POST',
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ currentPassword, newPassword: password })
         });
