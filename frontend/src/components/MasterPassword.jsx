@@ -58,7 +58,11 @@ export default function MasterPassword({ onUnlock }) {
                 toast.success(
                     <div className="flex items-center gap-2">Master password created!</div>,
                     {
-                        style: { background: '#9afecd', color: '#064E3B' },
+                        style: {
+                            background: '#9afecd', color: '#064E3B', width: 'calc(100% - 1.5rem)',
+                            maxWidth: '420px',
+                            margin: '0 auto',
+                        },
                         position: "top-center",
                         autoClose: 3000,
                         transition: Bounce
@@ -74,7 +78,11 @@ export default function MasterPassword({ onUnlock }) {
                         {password.length < 8 ? "Password must be at least 8 characters." : "Passwords do not match."}
                     </div>,
                     {
-                        style: { background: '#fcdcde', color: '#7F1D1D' },
+                        style: {
+                            background: '#fcdcde', color: '#7F1D1D', width: 'calc(100% - 1.5rem)',
+                            maxWidth: '420px',
+                            margin: '0 auto',
+                        },
                         position: "top-center",
                         autoClose: 3000,
                         transition: Bounce
@@ -97,7 +105,11 @@ export default function MasterPassword({ onUnlock }) {
                 toast.error(
                     <div className="flex items-center gap-2">Incorrect master password.</div>,
                     {
-                        style: { background: '#fcdcde', color: '#7F1D1D' },
+                        style: {
+                            background: '#fcdcde', color: '#7F1D1D', width: 'calc(100% - 1.5rem)',
+                            maxWidth: '420px',
+                            margin: '0 auto',
+                        },
                         position: "top-center",
                         autoClose: 3000,
                         transition: Bounce
@@ -130,7 +142,11 @@ export default function MasterPassword({ onUnlock }) {
             toast.success(
                 <div className="flex items-center gap-2">Master password reset successfully!</div>,
                 {
-                    style: { background: '#9afecd', color: '#064E3B' },
+                    style: {
+                        background: '#9afecd', color: '#064E3B', width: 'calc(100% - 1.5rem)',
+                        maxWidth: '420px',
+                        margin: '0 auto',
+                    },
                     position: "top-center",
                     autoClose: 3000,
                     transition: Bounce
@@ -142,7 +158,11 @@ export default function MasterPassword({ onUnlock }) {
             toast.error(
                 <div className="flex items-center gap-2">Incorrect current password. Cannot reset.</div>,
                 {
-                    style: { background: '#fcdcde', color: '#7F1D1D' },
+                    style: {
+                        background: '#fcdcde', color: '#7F1D1D', width: 'calc(100% - 1.5rem)',
+                        maxWidth: '420px',
+                        margin: '0 auto',
+                    },
                     position: "top-center",
                     autoClose: 3000,
                     transition: Bounce
