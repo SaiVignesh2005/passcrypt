@@ -15,6 +15,7 @@ let db;
 app.use(cors({
   origin: [
     "https://passcrypt-theta.vercel.app",
+     "https://passcrypt-3ng73jpn2-sai-vignesh-bharadwajs-projects.vercel.app",
     "http://localhost:5173",
     "http://localhost:5174",
     "http://localhost:5175",
