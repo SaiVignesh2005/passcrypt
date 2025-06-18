@@ -14,7 +14,7 @@ const API_BASE = import.meta.env.VITE_API_URL;
 
 let deviceId = localStorage.getItem('deviceId');
 if (!deviceId) {
-    deviceId = crypto.randomUUID(); 
+    deviceId = crypto.randomUUID();
     localStorage.setItem('deviceId', deviceId);
 }
 
@@ -25,6 +25,15 @@ const Homepage = () => {
     const [userInfo, setUserInfo] = useState({ site: '', username: '', password: '', id: '' });
     const [database, setDatabase] = useState([]);
     const [showPassword, setShowPassword] = useState(false);
+    const [visibleIds, setVisibleIds] = useState(new Set());
+    const toggleRowPassword = (id) => {
+        setVisibleIds(prev => {
+            const newSet = new Set(prev);
+            newSet.has(id) ? newSet.delete(id) : newSet.add(id);
+            return newSet;
+        });
+    };
+
 
     console.log("Using deviceId:", deviceId);
 
@@ -48,9 +57,9 @@ const Homepage = () => {
 
 
     const fetchPasswords = async () => {
-        const res = await fetch(`${API_BASE}/passwords?deviceId=${deviceId}`,{
+        const res = await fetch(`${API_BASE}/passwords?deviceId=${deviceId}`, {
             method: 'GET',
-            credentials: 'include'  
+            credentials: 'include'
         });
         const data = await res.json();
         const decrypted = (data.passwords || []).map(item => ({
@@ -118,12 +127,12 @@ const Homepage = () => {
 
     const handleDeletePassword = async (id) => {
         if (!confirm("Are you sure you want to delete this password?")) return;
-        const res = await fetch(`${API_BASE}/passwords/${id}`,{ 
-            method: 'DELETE' ,
+        const res = await fetch(`${API_BASE}/passwords/${id}`, {
+            method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
             body: JSON.stringify({ deviceId })
-         });
+        });
         res.ok && showToast('Password deleted!');
         fetchPasswords();
     };
@@ -266,12 +275,22 @@ const Homepage = () => {
 
                                             <td className="py-2 px-4 text-left">
                                                 <div className="flex items-center space-x-2">
-                                                    <span className="truncate flex-1 max-w-[200px]">{info.password}</span>
+                                                    <span className="truncate flex-1 max-w-[200px]">
+                                                        {visibleIds.has(info.id) ? info.password : '•'.repeat(8)}
+                                                    </span>
+                                                    <button onClick={() => toggleRowPassword(info.id)} className="flex-shrink-0">
+                                                        <img
+                                                            src={visibleIds.has(info.id) ? visibleEye : hiddenEye}
+                                                            alt="Toggle visibility"
+                                                            className="w-5 h-5 cursor-pointer hover:scale-110"
+                                                        />
+                                                    </button>
                                                     <button onClick={() => copyText(info.password)} className="flex-shrink-0">
                                                         <img src={copy} alt="Copy password" className="w-5 h-5 cursor-pointer hover:scale-110" />
                                                     </button>
                                                 </div>
                                             </td>
+
 
                                             <td className="py-2 px-4 text-left">
                                                 <div className="flex justify-start items-center gap-3">
