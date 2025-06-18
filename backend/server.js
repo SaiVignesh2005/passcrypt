@@ -14,14 +14,13 @@ let db;
 
 app.use(cors({
   origin: [
-   "https://passcrypt-theta.vercel.app", 
-  "http://localhost:5173",
-  "http://localhost:5174",
-  "http://localhost:5175", // 
-],
-credentials: true
+    "https://passcrypt-theta.vercel.app",
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://localhost:5175",
+  ],
+  credentials: true
 }));
-
 
 app.use(bodyParser.json());
 app.use("/master", masterRouter);
@@ -70,24 +69,23 @@ app.get('/passwords', async (req, res) => {
   }
 });
 
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
 async function startServer() {
   try {
     const client = await MongoClient.connect(uri);
     db = client.db(dbName);
     setMasterDB(db);
     console.log(`Connected to database: ${dbName}`);
-
-    app.listen(port, () => {
-      console.log(`Server is running on http://localhost:${port}`);
-    });
   } catch (error) {
-    console.error('Failed to connect to database:', error);
+    console.error('❌ Failed to connect to database:', error);
+  } finally {
+    app.listen(port, () => {
+      console.log(`✅ Server is running on http://localhost:${port}`);
+    });
   }
 }
-
-app.get('/health', (req, res) => {
-  res.status(200).send('OK');
-});
-
 
 startServer();
