@@ -31,10 +31,6 @@ const Homepage = () => {
     }, []);
 
     useEffect(() => {
-        fetchPasswords();
-    }, []);
-
-    useEffect(() => {
         toast.info('Master password verified!', {
             position: "top-center",
             autoClose: 1500,
