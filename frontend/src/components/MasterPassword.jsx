@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import logo from "../assets/images/logo.svg";
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+const API_BASE = import.meta.env.VITE_API_URL;
 
 export default function MasterPassword({ onUnlock }) {
     const [password, setPassword] = useState('');
@@ -14,7 +15,7 @@ export default function MasterPassword({ onUnlock }) {
     useEffect(() => {
         const checkMasterExists = async () => {
             try {
-                const res = await fetch('http://localhost:3000/master/exists');
+                const res = await fetch(`${API_BASE}/master/exists`);
                 const data = await res.json();
                 setIsNewPassword(!data.exists);
             } catch {
@@ -28,7 +29,7 @@ export default function MasterPassword({ onUnlock }) {
         e.preventDefault();
         if (isNewPassword) {
             if (password.length >= 8 && password === confirmPassword) {
-                await fetch('http://localhost:3000/master/set', {
+                await fetch(`${API_BASE}/master/set`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ password })
@@ -59,7 +60,7 @@ export default function MasterPassword({ onUnlock }) {
                 );
             }
         } else {
-            const res = await fetch('http://localhost:3000/master/verify', {
+            const res = await fetch(`${API_BASE}/master/verify`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password })
@@ -84,7 +85,7 @@ export default function MasterPassword({ onUnlock }) {
 
     const handleResetPassword = async (e) => {
         e.preventDefault();
-        const res = await fetch('http://localhost:3000/master/reset', {
+        const res = await fetch(`${API_BASE}/master/reset`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ currentPassword, newPassword: password })
