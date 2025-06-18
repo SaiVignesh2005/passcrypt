@@ -85,4 +85,9 @@ async function startServer() {
   }
 }
 
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
+
 startServer();
