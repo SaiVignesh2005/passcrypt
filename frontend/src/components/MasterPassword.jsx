@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import logo from "../assets/images/logo.svg";
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-const API_BASE = import.meta.env.VITE_API_URL;
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:10000";
 
 
 export default function MasterPassword({ onUnlock }) {
