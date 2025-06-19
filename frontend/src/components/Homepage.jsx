@@ -283,10 +283,7 @@ return (
 
                                         <td className="py-2 px-4 text-left">
                                             <div className="flex items-center justify-between w-full max-w-[280px]">
-                                                <span
-                                                    className="truncate flex-1 max-w-[200px] font-mono"
-                                                    style={{ minWidth: '100px', display: 'inline-block' }}
-                                                >
+                                                <span className="truncate font-mono w-[100px] overflow-hidden text-ellipsis whitespace-nowrap">
                                                     {visibleIds.has(info.id) ? info.password : '•'.repeat(16)}
                                                 </span>
                                                 <button onClick={() => toggleRowPassword(info.id)} className="flex-shrink-0">
