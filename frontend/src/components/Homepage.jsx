@@ -256,7 +256,7 @@ return (
                                 {database.map((info, idx) => (
                                     <tr key={idx} className="border-b">
                                         <td className="py-2 px-4 text-left">
-                                            <div className="flex items-center space-x-2">
+                                            <div className="flex flex-wrap items-center gap-2">
                                                 <a
                                                     href={info.site.startsWith('http') ? info.site : `https://${info.site}`}
                                                     target="_blank"
@@ -273,7 +273,7 @@ return (
                                         </td>
 
                                         <td className="py-2 px-4 text-left">
-                                            <div className="flex items-center space-x-2">
+                                            <div className="flex flex-wrap items-center gap-2">
                                                 <span className="truncate flex-1 max-w-[200px]">{info.username}</span>
                                                 <button onClick={() => copyText(info.username)} className="flex-shrink-0">
                                                     <img src={copy} alt="Copy username" className="w-5 h-5 cursor-pointer hover:scale-110" />
@@ -282,7 +282,7 @@ return (
                                         </td>
 
                                         <td className="py-2 px-4 text-left">
-                                            <div className="flex items-center space-x-2">
+                                            <div className="flex flex-wrap items-center gap-2">
                                                 <span
                                                     className="truncate flex-1 max-w-[200px] font-mono"
                                                     style={{ minWidth: '100px', display: 'inline-block' }}
